@@ -454,9 +454,15 @@ public class CarouselLayoutManager extends RecyclerView.LayoutManager implements
         }
     }
 
+    /**
+     * @param recycler
+     * @param width recyclerview 布局宽度
+     * @param height recyclerview 布局高度
+     */
     private void fillDataVertical(final RecyclerView.Recycler recycler, final int width, final int height) {
         final int start = (width - mDecoratedChildWidth) / 2;
         final int end = start + mDecoratedChildWidth;
+        // mDecorated child width/height 子成员的尺寸
 
         final int centerViewTop = (height - mDecoratedChildHeight) / 2;
 
@@ -465,6 +471,7 @@ public class CarouselLayoutManager extends RecyclerView.LayoutManager implements
             final int offset = getCardOffsetByPositionDiff(layoutOrder.mItemPositionDiff);
             final int top = centerViewTop + offset;
             final int bottom = top + mDecoratedChildHeight;
+            /** 子View渲染位置 */
             fillChildItem(start, top, end, bottom, layoutOrder, recycler, i);
         }
     }
@@ -493,6 +500,7 @@ public class CarouselLayoutManager extends RecyclerView.LayoutManager implements
         if (null != mViewPostLayout) {
             transformation = mViewPostLayout.transformChild(view, layoutOrder.mItemPositionDiff, mOrientation, layoutOrder.mItemAdapterPosition);
         }
+
         if (null == transformation) {
             view.layout(start, top, end, bottom);
         } else {
@@ -624,8 +632,10 @@ public class CarouselLayoutManager extends RecyclerView.LayoutManager implements
      * @return offset in scroll px coordinates.
      */
     protected int getCardOffsetByPositionDiff(final float itemPositionDiff) {
-        final double smoothPosition = convertItemPositionDiffToSmoothPositionDiff(itemPositionDiff);
+        /** 偏移量控制，0 ~ 1之间，调整子view的偏移量。0 为居中，1为居两端 . 越接近中心，这个值越小，偏移量越少 */
+        final double smoothPosition = Math.abs(itemPositionDiff == 0 ? 0 : itemPositionDiff / 2);
 
+        /** 布局偏移量最远距离 */
         final int dimenDiff;
         if (VERTICAL == mOrientation) {
             dimenDiff = (getHeightNoPadding() - mDecoratedChildHeight) / 2;
@@ -633,7 +643,9 @@ public class CarouselLayoutManager extends RecyclerView.LayoutManager implements
             dimenDiff = (getWidthNoPadding() - mDecoratedChildWidth) / 2;
         }
         //noinspection NumericCastThatLosesPrecision
-        return (int) Math.round(Math.signum(itemPositionDiff) * dimenDiff * smoothPosition);
+        int finallyDiff =
+                (int) Math.round(Math.signum(itemPositionDiff) * dimenDiff * smoothPosition);
+        return finallyDiff;
     }
 
     /**
@@ -749,23 +761,9 @@ public class CarouselLayoutManager extends RecyclerView.LayoutManager implements
                 final int orientation,
                 final int itemPositionInAdapter
         ) {
-            return transformChild(child, itemPositionToCenterDiff, orientation);
-        }
-
-        /**
-         * Called after child layout finished. Generally you can do any translation and scaling work here.
-         *
-         * @param child                    view that was layout
-         * @param itemPositionToCenterDiff view center line difference to layout center. if > 0 then this item is bellow layout center line, else if not
-         * @param orientation              layoutManager orientation {@link #getLayoutDirection()}
-         */
-        public ItemTransformation transformChild(
-                @NonNull final View child,
-                final float itemPositionToCenterDiff,
-                final int orientation
-        ) {
             throw new IllegalStateException("at least one transformChild should be implemented");
         }
+
     }
 
     public interface OnCenterItemSelectionListener {

@@ -21,15 +21,17 @@ public class CarouselZoomPostLayoutListener extends CarouselLayoutManager.PostLa
     }
 
     @Override
-    public ItemTransformation transformChild(@NonNull final View child, final float itemPositionToCenterDiff, final int orientation) {
-        final float scale = 1.0f - mScaleMultiplier * Math.abs(itemPositionToCenterDiff);
-
+    public ItemTransformation transformChild(@NonNull final View child,
+                                             final float itemPositionToCenterDiff,
+                                             final int orientation, final int itemPosition) {
+        final float scale = 1.0f - Math.abs(itemPositionToCenterDiff * 0.2f);
         // because scaling will make view smaller in its center, then we should move this item to the top or bottom to make it visible
         final float translateY;
         final float translateX;
         if (CarouselLayoutManager.VERTICAL == orientation) {
-            final float translateYGeneral = child.getMeasuredHeight() * (1 - scale) / 2f;
-            translateY = Math.signum(itemPositionToCenterDiff) * translateYGeneral;
+            final float translateYGeneral = child.getMeasuredHeight();
+            /** 此处不再额外进行平移 */
+            translateY = 0;
             translateX = 0;
         } else {
             final float translateXGeneral = child.getMeasuredWidth() * (1 - scale) / 2f;
