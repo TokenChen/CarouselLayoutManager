@@ -1,5 +1,6 @@
 package com.mig35.carousellayoutmanager;
 
+import android.util.Log;
 import androidx.annotation.NonNull;
 import android.view.View;
 
@@ -34,9 +35,17 @@ public class CarouselZoomPostLayoutListener extends CarouselLayoutManager.PostLa
             translateY = 0;
             translateX = 0;
         } else {
-            final float translateXGeneral = child.getMeasuredWidth() * (1 - scale) / 2f;
-            translateX = Math.signum(itemPositionToCenterDiff) * translateXGeneral;
+            final float translateXGeneral = 240;
             translateY = 0;
+
+            float tempScale = Math.abs(itemPositionToCenterDiff * 0.2f) / 2;
+            for (float i = Math.abs(itemPositionToCenterDiff) - 1; i > 0; i--) {
+                tempScale += (i * 0.2f);
+            }
+            final float scaleXOffset = child.getMeasuredWidth() * tempScale * Math.signum(itemPositionToCenterDiff);
+            translateX = translateXGeneral * (itemPositionToCenterDiff) - scaleXOffset + 20 * itemPositionToCenterDiff ;
+            Log.i("zoom listener", "item pos to center diff:" + itemPositionToCenterDiff + "  item position:" + itemPosition
+                    + " translateX" + translateX +" tempscal:" + tempScale + " scaleOffset:" + scaleXOffset);
         }
 
         return new ItemTransformation(scale, scale, translateX, translateY);
