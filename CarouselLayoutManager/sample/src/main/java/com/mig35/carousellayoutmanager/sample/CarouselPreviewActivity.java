@@ -1,5 +1,7 @@
 package com.mig35.carousellayoutmanager.sample;
 
+import android.content.pm.ActivityInfo;
+import android.content.res.Configuration;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
@@ -36,40 +38,15 @@ public class CarouselPreviewActivity extends AppCompatActivity {
         final TestAdapter adapter = new TestAdapter();
 
         // create layout manager with needed params: vertical, cycle
-        initRecyclerView(binding.listHorizontal, new CarouselLayoutManager(CarouselLayoutManager.HORIZONTAL, false), adapter);
-        initRecyclerView(binding.listVertical, new CarouselLayoutManager(CarouselLayoutManager.VERTICAL, true), adapter);
+        int orientation = getResources().getConfiguration().orientation;
+        Log.i("tag", "orientation test:" + orientation);
+        if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            initRecyclerView(binding.list, new CarouselLayoutManager(CarouselLayoutManager.HORIZONTAL, false), adapter);
+        } else {
+            initRecyclerView(binding.list, new CarouselLayoutManager(CarouselLayoutManager.VERTICAL,
+                    false), adapter);
+        }
 
-        // fab button will add element to the end of the list
-        binding.fabScroll.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(final View v) {
-/*
-                final int itemToRemove = adapter.mItemsCount;
-                if (10 != itemToRemove) {
-                    adapter.mItemsCount++;
-                    adapter.notifyItemInserted(itemToRemove);
-                }
-*/
-                binding.listHorizontal.smoothScrollToPosition(adapter.getItemCount() - 2);
-                binding.listVertical.smoothScrollToPosition(adapter.getItemCount() - 2);
-            }
-        });
-
-        // fab button will remove element from the end of the list
-        binding.fabChangeData.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(final View v) {
-/*
-                final int itemToRemove = adapter.mItemsCount - 1;
-                if (0 <= itemToRemove) {
-                    adapter.mItemsCount--;
-                    adapter.notifyItemRemoved(itemToRemove);
-                }
-*/
-                binding.listHorizontal.smoothScrollToPosition(1);
-                binding.listVertical.smoothScrollToPosition(1);
-            }
-        });
     }
 
     private void initRecyclerView(final RecyclerView recyclerView, final CarouselLayoutManager layoutManager, final TestAdapter adapter) {
@@ -113,17 +90,51 @@ public class CarouselPreviewActivity extends AppCompatActivity {
 
         private final int[] mColors;
         private final int[] mPosition;
-        private final int mItemsCount = 100;
+        private final int mItemsCount = 20;
 
         TestAdapter() {
             mColors = new int[mItemsCount];
             mPosition = new int[mItemsCount];
-            for (int i = 0; mItemsCount > i; ++i) {
-                //noinspection MagicNumber
-                final Random random = new Random();
-                mColors[i] = Color.argb(255, random.nextInt(256), random.nextInt(256), random.nextInt(256));
-                mPosition[i] = i;
-            }
+            mColors[0] = R.drawable.a1;
+            mPosition[0] = 0;
+            mColors[1] = R.drawable.a2;
+            mPosition[1] = 1;
+            mColors[2] = R.drawable.a3;
+            mPosition[2] = 2;
+            mColors[3] = R.drawable.a4;
+            mPosition[3] = 3;
+            mColors[4] = R.drawable.a5;
+            mPosition[4] = 4;
+            mColors[5] = R.drawable.a6;
+            mPosition[5] = 5;
+            mColors[6] = R.drawable.a7;
+            mPosition[6] = 6;
+            mColors[7] = R.drawable.a8;
+            mPosition[7] = 7;
+            mColors[8] = R.drawable.a9;
+            mPosition[8] = 8;
+            mColors[9] = R.drawable.a10;
+            mPosition[9] = 9;
+            mColors[10] = R.drawable.a11;
+            mPosition[10] = 10;
+            mColors[11] = R.drawable.a12;
+            mPosition[11] = 11;
+            mColors[12] = R.drawable.a13;
+            mPosition[12] = 12;
+            mColors[13] = R.drawable.a14;
+            mPosition[13] = 13;
+            mColors[14] = R.drawable.a15;
+            mPosition[14] = 14;
+            mColors[15] = R.drawable.a16;
+            mPosition[15] = 15;
+            mColors[16] = R.drawable.a17;
+            mPosition[16] = 16;
+            mColors[17] = R.drawable.a18;
+            mPosition[17] = 17;
+            mColors[18] = R.drawable.a19;
+            mPosition[18] = 18;
+            mColors[19] = R.drawable.a20;
+            mPosition[19] = 19;
         }
 
         @Override
@@ -137,7 +148,7 @@ public class CarouselPreviewActivity extends AppCompatActivity {
             Log.e("!!!!!!!!!", "onBindViewHolder: " + position);
             holder.mItemViewBinding.cItem1.setText(String.valueOf(mPosition[position]));
             holder.mItemViewBinding.cItem2.setText(String.valueOf(mPosition[position]));
-            holder.itemView.setBackgroundColor(mColors[position]);
+            holder.mItemViewBinding.testIv.setImageResource(mColors[position]);
         }
 
         @Override
