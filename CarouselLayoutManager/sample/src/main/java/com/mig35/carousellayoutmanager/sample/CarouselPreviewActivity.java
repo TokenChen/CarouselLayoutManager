@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.mig35.carousellayoutmanager.CarouselLayoutManager;
@@ -38,14 +39,7 @@ public class CarouselPreviewActivity extends AppCompatActivity {
         final TestAdapter adapter = new TestAdapter();
 
         // create layout manager with needed params: vertical, cycle
-        int orientation = getResources().getConfiguration().orientation;
-        Log.i("tag", "orientation test:" + orientation);
-        if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
-            initRecyclerView(binding.list, new CarouselLayoutManager(CarouselLayoutManager.HORIZONTAL, false), adapter);
-        } else {
-            initRecyclerView(binding.list, new CarouselLayoutManager(CarouselLayoutManager.VERTICAL,
-                    false), adapter);
-        }
+        initRecyclerView(binding.list, new CarouselLayoutManager(CarouselLayoutManager.HORIZONTAL, false), adapter);
 
     }
 
@@ -148,6 +142,11 @@ public class CarouselPreviewActivity extends AppCompatActivity {
             Log.e("!!!!!!!!!", "onBindViewHolder: " + position);
             holder.mItemViewBinding.cItem1.setText(String.valueOf(mPosition[position]));
             holder.mItemViewBinding.cItem2.setText(String.valueOf(mPosition[position]));
+            int orientation = holder.itemView.getContext().getResources().getConfiguration().orientation;
+            Log.i("tag", "orientation test:" + orientation);
+            if (orientation == Configuration.ORIENTATION_PORTRAIT) {
+                holder.mItemViewBinding.testIv.setScaleType(ImageView.ScaleType.CENTER_CROP);
+            }
             holder.mItemViewBinding.testIv.setImageResource(mColors[position]);
         }
 

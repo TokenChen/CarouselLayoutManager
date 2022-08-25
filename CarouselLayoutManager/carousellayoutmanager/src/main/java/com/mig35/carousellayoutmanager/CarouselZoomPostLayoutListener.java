@@ -1,6 +1,8 @@
 package com.mig35.carousellayoutmanager;
 
+import android.content.res.Configuration;
 import android.util.Log;
+import android.widget.ImageView;
 import androidx.annotation.NonNull;
 import android.view.View;
 
@@ -35,7 +37,13 @@ public class CarouselZoomPostLayoutListener extends CarouselLayoutManager.PostLa
             translateY = 0;
             translateX = 0;
         } else {
-            final float translateXGeneral = 240;
+
+            float translateXGeneral = 240;
+            int screenOrientation = child.getContext().getResources().getConfiguration().orientation;
+            Log.i("tag", "orientation test:" + screenOrientation);
+            if (screenOrientation == Configuration.ORIENTATION_PORTRAIT) {
+                translateXGeneral = 135;
+            }
             translateY = 0;
 
             float tempScale = Math.abs(itemPositionToCenterDiff * 0.2f) / 2;
