@@ -1,5 +1,6 @@
 package com.mig35.carousellayoutmanager.sample;
 
+import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.graphics.Color;
@@ -23,6 +24,7 @@ import java.util.Random;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityOptionsCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 public class CarouselPreviewActivity extends AppCompatActivity {
@@ -61,7 +63,15 @@ public class CarouselPreviewActivity extends AppCompatActivity {
             public void onCenterItemClicked(@NonNull final RecyclerView recyclerView, @NonNull final CarouselLayoutManager carouselLayoutManager, @NonNull final View v) {
                 final int position = recyclerView.getChildLayoutPosition(v);
                 final String msg = String.format(Locale.US, "Item %1$d was clicked", position);
-                Toast.makeText(CarouselPreviewActivity.this, msg, Toast.LENGTH_SHORT).show();
+                // Toast.makeText(CarouselPreviewActivity.this, msg, Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent();
+                intent.setClassName(getApplicationContext(), MainActivity.class.getCanonicalName());
+                Log.i("tagtest", "classname:" + MainActivity.class.getSimpleName() + " cano:" + MainActivity.class.getCanonicalName());
+                Bundle optionsBundle = ActivityOptionsCompat.makeSceneTransitionAnimation(
+                        CarouselPreviewActivity.this, v, getString(R.string.app_name)).toBundle();
+                intent.putExtra("imageres", adapter.mColors[position]);
+                startActivity(intent, optionsBundle);
+
             }
         }, recyclerView, layoutManager);
 
