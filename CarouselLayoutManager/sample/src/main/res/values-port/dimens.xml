@@ -2,7 +2,9 @@
     <!-- Default screen margins, per the Android Design guidelines. -->
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
+    <dimen name="recyclerview_height">679dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
-    <dimen name="item_width">216dp</dimen>
-    <dimen name="item_height">384dp</dimen>
+    <dimen name="item_width">367dp</dimen>
+    <dimen name="item_height">653dp</dimen>
+    <dimen name="item_margin">89dp</dimen>
 </resources>

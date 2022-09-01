@@ -5,6 +5,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -80,6 +81,7 @@ public class CarouselLayoutManager extends RecyclerView.LayoutManager implements
      *
      * @param orientation  should be {@link #VERTICAL} or {@link #HORIZONTAL}
      * @param circleLayout true for enabling circleLayout
+     * @param itemMargin margin between item
      */
     @SuppressWarnings("unused")
     public CarouselLayoutManager(final int orientation, final boolean circleLayout) {
@@ -632,20 +634,15 @@ public class CarouselLayoutManager extends RecyclerView.LayoutManager implements
      * @return offset in scroll px coordinates.
      */
     protected int getCardOffsetByPositionDiff(final float itemPositionDiff) {
-        /** 偏移量控制，0 ~ 1之间，调整子view的偏移量。0 为居中，1为居两端 . 越接近中心，这个值越小，偏移量越少 */
-        final double smoothPosition = Math.abs(itemPositionDiff == 0 ? 0 : itemPositionDiff / 2);
-
+        /** 偏移量控制，调整子view的偏移量。0 为居中，越接近中心，这个值越小，偏移量越少 */
         /** 布局偏移量最远距离 */
         final int dimenDiff;
         if (VERTICAL == mOrientation) {
-            dimenDiff = (getHeightNoPadding() - mDecoratedChildHeight) / 2;
+            dimenDiff = mDecoratedChildHeight;
         } else {
-            dimenDiff = (getWidthNoPadding() - mDecoratedChildWidth) / 2;
+            dimenDiff = mDecoratedChildWidth;
         }
-        //noinspection NumericCastThatLosesPrecision
-        int finallyDiff =
-                (int) Math.round(Math.signum(itemPositionDiff) * dimenDiff * smoothPosition);
-        return finallyDiff;
+        return Math.round(dimenDiff * itemPositionDiff);
     }
 
     /**
